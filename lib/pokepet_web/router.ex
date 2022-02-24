@@ -8,6 +8,7 @@ defmodule PokepetWeb.Router do
   scope "/api", PokepetWeb do
     pipe_through :api
     resources "/users", UserController, except: [:new, :edit]
+    resources "/pokemons", PokemonController, except: [:new, :edit]
   end
 
   # Enables LiveDashboard only for development
