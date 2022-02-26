@@ -49,7 +49,16 @@ defmodule Pokepet.Team do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_pokemon(attrs \\ %{}) do
+
+  def create_pokemon(attrs \\ %{})
+
+  def create_pokemon(%{"poke_id" => poke_id}) when is_integer(poke_id) do
+    alias Pokepet.PokeAPI
+    pokemon_name = PokeAPI.get_name_by_id(poke_id)
+    create_pokemon(%{"name" => pokemon_name, "hunger" => 0})
+  end
+
+  def create_pokemon(attrs) do
     %Pokemon{}
     |> Pokemon.changeset(attrs)
     |> Repo.insert()
