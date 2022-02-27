@@ -13,4 +13,11 @@ defmodule PokepetWeb.FallbackController do
     |> put_view(PokepetWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, %Ecto.Changeset{}}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(PokepetWeb.ErrorView)
+    |> render(:"422")
+  end
 end
