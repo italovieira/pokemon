@@ -20,4 +20,11 @@ defmodule PokepetWeb.FallbackController do
     |> put_view(PokepetWeb.ErrorView)
     |> render(:"422")
   end
+
+  def call(conn, {:error, message}) when is_bitstring(message) do
+    conn
+    |> put_status(:method_not_allowed)
+    |> put_view(PokepetWeb.ErrorView)
+    |> render("error.json", message: message)
+  end
 end

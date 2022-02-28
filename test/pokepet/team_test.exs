@@ -57,5 +57,20 @@ defmodule Pokepet.TeamTest do
       pokemon = pokemon_fixture()
       assert %Ecto.Changeset{} = Team.change_pokemon(pokemon)
     end
+
+    test "feed_pokemon/1 returns a pokemon changeset" do
+      pokemon = pokemon_fixture(%{hunger: 42})
+      assert {:ok, %Pokemon{hunger: 22}} = Team.feed_pokemon(pokemon)
+    end
+
+    test "feed_pokemon/1 returns a pokemon with non negative hunger" do
+      pokemon = pokemon_fixture(%{hunger: 19})
+      assert {:ok, %Pokemon{hunger: 0}} = Team.feed_pokemon(pokemon)
+    end
+
+    test "feed_pokemon/1 do nothing for fainted pokemon" do
+      pokemon = pokemon_fixture(%{hunger: 150})
+      assert {:error, _message} = Team.feed_pokemon(pokemon)
+    end
   end
 end

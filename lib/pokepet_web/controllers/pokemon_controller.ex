@@ -40,4 +40,12 @@ defmodule PokepetWeb.PokemonController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def feed(conn, %{"pokemon_id" => id}) do
+    pokemon = Team.get_pokemon!(id)
+
+    with {:ok, %Pokemon{} = pokemon} <- Team.feed_pokemon(pokemon) do
+      render(conn, "show.json", pokemon: pokemon)
+    end
+  end
 end

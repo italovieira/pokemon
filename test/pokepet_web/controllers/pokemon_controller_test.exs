@@ -52,6 +52,30 @@ defmodule PokepetWeb.PokemonControllerTest do
     end
   end
 
+  describe "feed pokemon" do
+    test "feeds chosen pokemon", %{conn: conn} do
+      pokemon = pokemon_fixture(%{hunger: 42})
+      conn = patch(conn, Routes.pokemon_feed_path(conn, :feed, pokemon))
+      assert %{"id" => id} = json_response(conn, 200)["data"]
+
+      assert %{
+               "id" => ^id,
+               "hunger" => 22,
+             } = json_response(conn, 200)["data"]
+    end
+
+    test "try to feed fainted pokemon", %{conn: conn} do
+      pokemon = pokemon_fixture(%{hunger: 150})
+      conn = patch(conn, Routes.pokemon_feed_path(conn, :feed, pokemon))
+      assert %{"message" => _message} = json_response(conn, 405)
+
+      conn = get(conn, Routes.pokemon_path(conn, :show, pokemon.id))
+      assert %{
+               "hunger" => 150,
+             } = json_response(conn, 200)["data"]
+    end
+  end
+
   defp create_pokemon(_) do
     pokemon = pokemon_fixture()
     %{pokemon: pokemon}

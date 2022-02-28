@@ -110,4 +110,28 @@ defmodule Pokepet.Team do
   def change_pokemon(%Pokemon{} = pokemon, attrs \\ %{}) do
     Pokemon.changeset(pokemon, attrs)
   end
+
+  @doc """
+  Feeds pokemon decreasing its hunger by 20
+
+  ## Examples
+
+      iex> feed_pokemon(pokemon)
+      {:ok, %Pokemon{}}
+
+      iex> feed_pokemon(pokemon)
+      {:error, %Ecto.Changeset{}}
+
+  """
+
+  def feed_pokemon(%Pokemon{} = pokemon) do
+    case pokemon do
+      %{hunger: 150} ->
+        {:error, "pokemon is passed out"}
+      %{hunger: hunger} ->
+        pokemon
+        |> Pokemon.changeset(%{"hunger" => max(0, hunger - 20)})
+        |> Repo.update()
+    end
+  end
 end
