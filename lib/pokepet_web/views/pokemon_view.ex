@@ -13,7 +13,8 @@ defmodule PokepetWeb.PokemonView do
   def render("pokemon.json", %{pokemon: pokemon}) do
     %{
       id: pokemon.id,
-      poke_id: pokemon.poke_id
+      name: pokemon.name,
+      hunger: pokemon.hunger,
     }
   end
 end

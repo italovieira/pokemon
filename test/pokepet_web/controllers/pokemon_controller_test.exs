@@ -3,13 +3,8 @@ defmodule PokepetWeb.PokemonControllerTest do
 
   import Pokepet.TeamFixtures
 
-  alias Pokepet.Team.Pokemon
-
   @create_attrs %{
-    poke_id: 42
-  }
-  @update_attrs %{
-    poke_id: 43
+    poke_id: 6
   }
   @invalid_attrs %{poke_id: nil}
 
@@ -33,33 +28,13 @@ defmodule PokepetWeb.PokemonControllerTest do
 
       assert %{
                "id" => ^id,
-               "poke_id" => 42
+               "name" => "charizard",
+               "hunger" => 0,
              } = json_response(conn, 200)["data"]
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.pokemon_path(conn, :create), pokemon: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "update pokemon" do
-    setup [:create_pokemon]
-
-    test "renders pokemon when data is valid", %{conn: conn, pokemon: %Pokemon{id: id} = pokemon} do
-      conn = put(conn, Routes.pokemon_path(conn, :update, pokemon), pokemon: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, Routes.pokemon_path(conn, :show, id))
-
-      assert %{
-               "id" => ^id,
-               "poke_id" => 43
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, pokemon: pokemon} do
-      conn = put(conn, Routes.pokemon_path(conn, :update, pokemon), pokemon: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
